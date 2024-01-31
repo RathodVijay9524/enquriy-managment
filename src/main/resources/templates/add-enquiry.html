@@ -56,52 +56,52 @@
 									<div class="text-center">
 										<h4 class="mt-1 mb-5 pb-1">Add Student Enquriy Here</h4>
 									</div>
+									<p th:text="${succMsg}" class="text-success"></p>
+									<p th:text="${errMsg}" class="text-danger"></p>
 
-									<form>
-										<div class="form-outline mb-4">
-											<input type="email" id="form2Example11" class="form-control"
-												placeholder="Student Name" /> <label class="form-label"
+									<form th:action="@{/addEnq}" th:object="${formObject}" method="post">
+											<div class="form-outline mb-4">
+											<input type="text" id="form2Example11" class="form-control"
+												placeholder="Student Name" th:field="*{studentName}"/> <label class="form-label"
 												for="form2Example11">Student Name</label>
 										</div>
 
 										<div class="form-outline mb-4">
-											<input type="email" id="form2Example11" class="form-control"
-												placeholder="Student Name" /> <label class="form-label"
-												for="form2Example11">Contact Number</label>
+											<input type="text" id="form2Example12" class="form-control"
+												placeholder="Contact Number" th:field="*{phoNo}" /> <label class="form-label"
+												for="form2Example12">Contact Number</label>
 										</div>
 
 										<div class="form-outline mb-4">
-											<label class="form-label" for="form2Example22">Class
-												Mode</label> <select id="form2Example22" class="form-select">
-												<option>-Select-</option>
-												<option>Online</option>
-												<option>Classroom</option>
+											<label class="form-label" for="form2Example23">Class
+												Mode</label> <select id="form2Example23" class="form-select" th:field="*{classMode}">
+												<option value="">-Select-</option>
+												<option value="online">Online</option>
+												<option value="classroom">Classroom</option>
 											</select>
 										</div>
 
 										<div class="form-outline mb-4">
-											<label class="form-label" for="form2Example22">Course</label>
-											<select id="form2Example22" class="form-select">
-												<option>-Select-</option>
-												<option selected>Java Fullstack</option>
-												<option>DevOps</option>
-												<option>AWS</option>
+											<label class="form-label" for="form2Example24">Course</label>
+											<select id="form2Example24" class="form-select" th:field="*{courseName}">
+												<option value="">-Select-</option>
+												<option th:each="course : ${coursesName}" th:value="${course}" th:text="${course}"></option>
+
 											</select>
 										</div>
 										<div class="form-outline mb-4">
 											<label class="form-label" for="form2Example22">Enquiry
-												Status</label> <select id="form2Example22" class="form-select">
-												<option>-Select-</option>
-												<option selected>New</option>
-												<option>Enrolled</option>
-												<option>Lost</option>
+												Status</label> <select id="form2Example22" class="form-select" th:field="*{enquiryStatus}">
+												<option value="">-Select-</option>
+											<option th:each="status : ${enqStatus}" th:value="${status}" th:text="${status}"></option>
+
 											</select>
 										</div>
 
 										<div class="text-center pt-1 mb-5 pb-1">
-											<button
+											<input type="submit"
 												class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
-												type="button">Submit</button>
+												   value="Submit" />
 										</div>
 
 
