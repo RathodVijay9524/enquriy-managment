@@ -1,6 +1,7 @@
 package com.vijay.controller;
 
 import com.vijay.entities.UserDtlsEntity;
+import com.vijay.helper.EmailUtils;
 import com.vijay.model.LoginForm;
 import com.vijay.model.ResetPwdForm;
 import com.vijay.model.SignUpForm;

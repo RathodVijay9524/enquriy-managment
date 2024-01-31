@@ -28,4 +28,7 @@ public class UserDtlsEntity {
     private String accStatus;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<StudentEnqEntity> enquiries;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ChildUser> childUsers;
 }

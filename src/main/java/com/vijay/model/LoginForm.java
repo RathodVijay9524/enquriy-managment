@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class LoginForm {
 
+    private Integer userId;
     private String email;
     private String pwd;
 }

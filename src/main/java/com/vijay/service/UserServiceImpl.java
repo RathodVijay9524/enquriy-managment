@@ -1,5 +1,6 @@
 package com.vijay.service;
 
+import com.vijay.entities.ChildUser;
 import com.vijay.entities.UserDtlsEntity;
 import com.vijay.helper.EmailUtils;
 import com.vijay.helper.PwdUtils;
@@ -7,6 +8,7 @@ import com.vijay.model.LoginForm;
 import com.vijay.model.ResetPwdForm;
 import com.vijay.model.SignUpForm;
 import com.vijay.model.UnlockForm;
+import com.vijay.repo.ChildUserRepo;
 import com.vijay.repo.StudentEnqRepo;
 import com.vijay.repo.UserDtlsRepo;
 import jakarta.servlet.http.HttpSession;
@@ -21,19 +23,27 @@ public class UserServiceImpl implements UserService {
     private UserDtlsRepo userDtlsRepo;
     @Autowired
     private EmailUtils emailUtils;
+    @Autowired
+    private ChildUserRepo childUserRepo;
 
     @Autowired
     private HttpSession session;
     @Override
     public String login(LoginForm form) {
-        UserDtlsEntity entity= userDtlsRepo.findByEmailAndPwd(form.getEmail(), form.getPwd());
-        if(entity == null){
+
+        UserDtlsEntity entity = userDtlsRepo.findByEmailAndPwd(form.getEmail(), form.getPwd());
+        if (entity == null) {
+            ChildUser childUser= childUserRepo.findByEmailAndPwd(form.getEmail(), form.getPwd());
+            if (childUser != null) {
+                session.setAttribute("userId", childUser.getChildUserId());
+                return "success";
+            }
             return "Invalid Credentials";
         }
-        if(entity.getAccStatus().equals("LOCKED")){
+        if (entity.getAccStatus().equals("LOCKED")) {
             return "your Account is Locked, Unlock you account";
         }
-        session.setAttribute("userId",entity.getUserId());
+        session.setAttribute("userId", entity.getUserId());
         return "success";
     }
 
@@ -65,10 +75,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean unlockAccount(UnlockForm form) {
         UserDtlsEntity entity= userDtlsRepo.findByEmail(form.getEmail());
-        if(entity.getPwd().equals(form.getTempPwd())){
+        if (entity != null && entity.getPwd().equals(form.getTempPwd())) {
             entity.setPwd(form.getNewPwd());
             entity.setAccStatus("Unlocked");
+            String email = entity.getEmail();
             userDtlsRepo.save(entity);
+            String subject = "Congratulations! Your Account is Unlocked";
+            String body = "You can enroll in any course.<br> We have the best faculty.<br> Thank you.";
+            emailUtils.sendEmail(email, subject, body);
             return true;
 
         }else{

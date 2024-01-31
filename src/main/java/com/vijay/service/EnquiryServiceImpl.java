@@ -1,5 +1,6 @@
 package com.vijay.service;
 
+import com.vijay.entities.ChildUser;
 import com.vijay.entities.StudentEnqEntity;
 import com.vijay.entities.UserDtlsEntity;
 import com.vijay.model.DashboardResponse;
@@ -49,6 +50,7 @@ public class EnquiryServiceImpl implements EnquiryService{
         if(user.isPresent()){
             UserDtlsEntity entity= user.get();
             List<StudentEnqEntity> enquiries= entity.getEnquiries();
+            List<ChildUser> childUsers = entity.getChildUsers();
             Integer totalCnt= enquiries.size();
             Integer enrolled = enquiries.stream().filter(e -> e.getEnquiryStatus().equals("ENROLLED")).collect(Collectors.toList()).size();
             Integer lost = enquiries.stream().filter(e -> e.getEnquiryStatus().equals("LOST")).collect(Collectors.toList()).size();
@@ -57,6 +59,8 @@ public class EnquiryServiceImpl implements EnquiryService{
             dashboardResponse.setLostCnt(lost);
             dashboardResponse.setEmail(entity.getEmail());
             dashboardResponse.setName(entity.getName());
+            dashboardResponse.setUserId(entity.getUserId());
+            dashboardResponse.setChildUsers(childUsers);
         }
         return dashboardResponse;
     }

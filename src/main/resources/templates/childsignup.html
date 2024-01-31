@@ -84,8 +84,9 @@
 									<p th:text="${succMsg}" class="text-success"></p>
 									<p th:text="${errMsg}" class="text-danger"></p>
 
-									<form th:action="@{/signup}" th:object="${user}" method="post">
+									<form th:action="@{/workingUser}" th:object="${user}" method="post">
 										<p>Please create account here</p>
+
 										<div class="form-outline mb-6">
 											<input type="hidden" th:field="${user.userId}">
 										</div>
