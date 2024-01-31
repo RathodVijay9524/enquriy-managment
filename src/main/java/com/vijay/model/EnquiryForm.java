@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class EnquiryForm {
     private String studentName;
-    private Long studentPhno;
+    private Integer phoNo;
     private String classMode;
     private String courseName;
-    private String enqStatus;
+    private String enquiryStatus;
 }

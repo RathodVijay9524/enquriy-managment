@@ -33,11 +33,11 @@ public class UserServiceImpl implements UserService {
 
         UserDtlsEntity entity = userDtlsRepo.findByEmailAndPwd(form.getEmail(), form.getPwd());
         if (entity == null) {
-            ChildUser childUser= childUserRepo.findByEmailAndPwd(form.getEmail(), form.getPwd());
+           /* ChildUser childUser= childUserRepo.findByEmailAndPwd(form.getEmail(), form.getPwd());
             if (childUser != null) {
                 session.setAttribute("userId", childUser.getChildUserId());
                 return "success";
-            }
+            }*/
             return "Invalid Credentials";
         }
         if (entity.getAccStatus().equals("LOCKED")) {
@@ -53,7 +53,6 @@ public class UserServiceImpl implements UserService {
         if(user!=null){
             return false;
         }
-
         UserDtlsEntity entity= new UserDtlsEntity();
         BeanUtils.copyProperties(form, entity);
         String tempPwd= PwdUtils.generateRandomPwd();

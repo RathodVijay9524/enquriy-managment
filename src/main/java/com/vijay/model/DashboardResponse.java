@@ -15,7 +15,7 @@ public class DashboardResponse {
     private Integer userId;
     private String email;
     private String name;
-    private Integer totalEnquriesCnt;
+    private Integer enqCnt;
     private Integer enrolledCnt;
     private Integer lostCnt;
     private List<ChildUser> childUsers;
