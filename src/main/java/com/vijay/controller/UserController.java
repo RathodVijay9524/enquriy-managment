@@ -1,9 +1,12 @@
 package com.vijay.controller;
 
+import com.vijay.entities.UserDtlsEntity;
 import com.vijay.model.LoginForm;
+import com.vijay.model.ResetPwdForm;
 import com.vijay.model.SignUpForm;
 import com.vijay.model.UnlockForm;
 import com.vijay.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +21,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+
     @GetMapping("/login")
     public String loginPage(Model model){
         model.addAttribute("loginForm",new LoginForm());
@@ -29,6 +33,7 @@ public class UserController {
         String status = userService.login(loginForm);
         if(status.contains("success")){
             return "redirect:/dashboard";
+
         }
         model.addAttribute("errMsg",status);
         return "login";
@@ -64,7 +69,6 @@ public class UserController {
     }
     @PostMapping("/unlock")
     public String unlockUserAccount(@ModelAttribute("unlock") UnlockForm unlock, Model model){
-        System.out.println(unlock);
         if(unlock.getNewPwd().equals(unlock.getConfirmPwd())){
             boolean status = userService.unlockAccount(unlock);
             if(status){
@@ -80,7 +84,6 @@ public class UserController {
     }
     @GetMapping("/forgot")
     public String forgotPwdPage(){
-
         return "forgotPwd";
     }
     @PostMapping("/forgotPwd")
@@ -92,6 +95,30 @@ public class UserController {
             model.addAttribute("errMsg","Please enter valid email id !");
         }
         return "forgotPwd";
+    }
+
+    @GetMapping("/resetPwd")
+    public String resetPwdPage(@RequestParam String email, Model model){
+        ResetPwdForm resetPwdForm = new ResetPwdForm();
+        resetPwdForm.setEmail(email);
+        model.addAttribute("resetForm", resetPwdForm);
+        return "resetPwd";
+    }
+    @PostMapping("/resetPwd")
+    public String resetPwd(@ModelAttribute("resetForm") ResetPwdForm resetForm, Model model){
+        if(resetForm.getNewPwd().equals(resetForm.getConfirmPwd())){
+            boolean status= userService.resetPwd(resetForm);
+            if(status){
+                model.addAttribute("succMsg","Password updated successfully !");
+            }else{
+                model.addAttribute("errMsg","Your Old password is incorrect !");
+            }
+        }else {
+            model.addAttribute("errMsg","New pwd and Confirm pwd should be same");
+
+        }
+
+        return "resetPwd";
     }
 
 }

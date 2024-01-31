@@ -4,10 +4,12 @@ import com.vijay.entities.UserDtlsEntity;
 import com.vijay.helper.EmailUtils;
 import com.vijay.helper.PwdUtils;
 import com.vijay.model.LoginForm;
+import com.vijay.model.ResetPwdForm;
 import com.vijay.model.SignUpForm;
 import com.vijay.model.UnlockForm;
 import com.vijay.repo.StudentEnqRepo;
 import com.vijay.repo.UserDtlsRepo;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,9 @@ public class UserServiceImpl implements UserService {
     private UserDtlsRepo userDtlsRepo;
     @Autowired
     private EmailUtils emailUtils;
+
+    @Autowired
+    private HttpSession session;
     @Override
     public String login(LoginForm form) {
         UserDtlsEntity entity= userDtlsRepo.findByEmailAndPwd(form.getEmail(), form.getPwd());
@@ -28,6 +33,7 @@ public class UserServiceImpl implements UserService {
         if(entity.getAccStatus().equals("LOCKED")){
             return "your Account is Locked, Unlock you account";
         }
+        session.setAttribute("userId",entity.getUserId());
         return "success";
     }
 
@@ -82,4 +88,16 @@ public class UserServiceImpl implements UserService {
         emailUtils.sendEmail(email,subject,body);
         return true;
     }
+
+    @Override
+    public boolean resetPwd(ResetPwdForm form) {
+        UserDtlsEntity entity= userDtlsRepo.findByEmail(form.getEmail());
+        if(entity.getPwd().equals(form.getOldPwd())){
+            entity.setPwd(form.getNewPwd());
+            userDtlsRepo.save(entity);
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -24,4 +26,6 @@ public class UserDtlsEntity {
     private Integer phoNo;
     private String pwd;
     private String accStatus;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<StudentEnqEntity> enquiries;
 }

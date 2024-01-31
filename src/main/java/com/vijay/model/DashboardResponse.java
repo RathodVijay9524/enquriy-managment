@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 public class DashboardResponse {
 
+    private String email;
+    private String name;
     private Integer totalEnquriesCnt;
     private Integer enrolledCnt;
     private Integer lostCnt;

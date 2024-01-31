@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.util.Date;
 @Getter
@@ -21,12 +23,16 @@ public class StudentEnqEntity {
     private Integer enquiryId;
     private String studentName;
 
-    private  Integer phoNo;
+    private Integer phoNo;
     private String classMode;
     private String CourseName;
     private String enquiryStatus;
+    @CreationTimestamp
     private Date createdDate;
+    @UpdateTimestamp
     private Date updatedDate;
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private UserDtlsEntity user;
 
 }

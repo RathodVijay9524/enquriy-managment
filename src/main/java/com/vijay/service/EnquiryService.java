@@ -11,7 +11,7 @@ public interface EnquiryService {
 
     public List<String> getCoursesName();
     public List<String> getEnqStatus();
-    public DashboardResponse getDashBoardDtat(Integer userId);
+    public DashboardResponse getDashBoardDtata(Integer userId);
     public String addEnquiry(EnquiryForm form);
     public List<EnquiryForm> getEnquries(Integer userId, EnquirySearchCriteria criteria);
     public EnquiryForm getEnquiry(Integer enqId);
