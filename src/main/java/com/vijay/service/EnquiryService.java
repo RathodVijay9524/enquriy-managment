@@ -1,5 +1,6 @@
 package com.vijay.service;
 
+import com.vijay.entities.StudentEnqEntity;
 import com.vijay.model.DashboardResponse;
 import com.vijay.model.EnquiryForm;
 import com.vijay.model.EnquirySearchCriteria;
@@ -13,8 +14,8 @@ public interface EnquiryService {
     public List<String> getEnqStatus();
     public DashboardResponse getDashBoardDtata(Integer userId);
     public boolean addEnquiry(EnquiryForm form);
-    public List<EnquiryForm> getEnquries(Integer userId, EnquirySearchCriteria criteria);
-    public EnquiryForm getEnquiry(Integer enqId);
+    public List<StudentEnqEntity> getFilteredEnq(EnquirySearchCriteria criteria);
+    public List<StudentEnqEntity> getEnquiries();
 
 
 }

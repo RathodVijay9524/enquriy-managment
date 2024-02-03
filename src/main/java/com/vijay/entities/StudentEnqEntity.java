@@ -23,7 +23,7 @@ public class StudentEnqEntity {
     private Integer enquiryId;
     private String studentName;
 
-    private Integer phoNo;
+    private Long phoNo;
     private String classMode;
     private String CourseName;
     private String enquiryStatus;

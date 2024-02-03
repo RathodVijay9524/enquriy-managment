@@ -9,6 +9,7 @@ import com.vijay.model.UnlockForm;
 import com.vijay.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private HttpSession session;
 
 
     @GetMapping("/login")
@@ -33,12 +36,14 @@ public class UserController {
         System.out.println(loginForm);
         String status = userService.login(loginForm);
         if(status.contains("success")){
+
             return "redirect:/dashboard";
 
         }
         model.addAttribute("errMsg",status);
         return "login";
     }
+    
 
 
 

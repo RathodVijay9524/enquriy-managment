@@ -12,11 +12,14 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class EnquiryServiceImpl implements EnquiryService{
@@ -62,17 +65,17 @@ public class EnquiryServiceImpl implements EnquiryService{
         if(user.isPresent()){
             UserDtlsEntity entity= user.get();
             List<StudentEnqEntity> enquiries= entity.getEnquiries();
-            List<ChildUser> childUsers = entity.getChildUsers();
+
             Integer totalCnt= enquiries.size();
-            Integer enrolled = enquiries.stream().filter(e -> e.getEnquiryStatus().equals("ENROLLED")).collect(Collectors.toList()).size();
-            Integer lost = enquiries.stream().filter(e -> e.getEnquiryStatus().equals("LOST")).collect(Collectors.toList()).size();
+            Integer enrolled = enquiries.stream().filter(e -> e.getEnquiryStatus().equals("Enrolled")).collect(Collectors.toList()).size();
+            Integer lost = enquiries.stream().filter(e -> e.getEnquiryStatus().equals("Lost")).collect(Collectors.toList()).size();
             dashboardResponse.setEnqCnt(totalCnt);
             dashboardResponse.setEnrolledCnt(enrolled);
             dashboardResponse.setLostCnt(lost);
             dashboardResponse.setEmail(entity.getEmail());
             dashboardResponse.setName(entity.getName());
             dashboardResponse.setUserId(entity.getUserId());
-            dashboardResponse.setChildUsers(childUsers);
+
         }
         return dashboardResponse;
     }
@@ -88,13 +91,52 @@ public class EnquiryServiceImpl implements EnquiryService{
         return true;
     }
 
-    @Override
-    public List<EnquiryForm> getEnquries(Integer userId, EnquirySearchCriteria criteria) {
-        return null;
-    }
+
+
 
     @Override
-    public EnquiryForm getEnquiry(Integer enqId) {
+    public List<StudentEnqEntity> getEnquiries() {
+        Integer userId=(Integer) session.getAttribute("userId");
+        Optional<UserDtlsEntity> byId= userDtlsRepo.findById(userId);
+        if(byId.isPresent()){
+            UserDtlsEntity entity= byId.get();
+            List<StudentEnqEntity> enquiries= entity.getEnquiries();
+            return enquiries;
+        }
         return null;
     }
+    @Override
+    public List<StudentEnqEntity> getFilteredEnq(EnquirySearchCriteria criteria) {
+        Integer userId =(Integer) session.getAttribute("userId");
+        Optional<UserDtlsEntity> userDtlsOptional = userDtlsRepo.findById(userId);
+
+        if (userDtlsOptional.isPresent()) {
+            UserDtlsEntity entity = userDtlsOptional.get();
+            List<StudentEnqEntity> enquiries = entity.getEnquiries();
+
+            if (StringUtils.hasText(criteria.getCourseName())) {
+                enquiries = enquiries.stream()
+                        .filter(e -> e.getCourseName().equals(criteria.getCourseName()))
+                        .collect(Collectors.toList());
+            }
+
+            if (StringUtils.hasText(criteria.getEnquiryStatus())) {
+                enquiries = enquiries.stream()
+                        .filter(e -> e.getEnquiryStatus().equals(criteria.getEnquiryStatus()))
+                        .collect(Collectors.toList());
+            }
+
+            if (StringUtils.hasText(criteria.getClassMode())) {
+                enquiries = enquiries.stream()
+                        .filter(e -> e.getClassMode().equals(criteria.getClassMode()))
+                        .collect(Collectors.toList());
+            }
+            System.out.println("Enq List :" +enquiries);
+
+            return enquiries;
+        }
+
+        return Collections.emptyList(); // Return an empty list if user not present
+    }
+
 }

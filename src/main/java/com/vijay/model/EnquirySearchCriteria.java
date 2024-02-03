@@ -8,4 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 public class EnquirySearchCriteria {
+    private String classMode;
+    private String courseName;
+    private String enquiryStatus;
 }

@@ -1,6 +1,5 @@
 package com.vijay.service;
 
-import com.vijay.entities.ChildUser;
 import com.vijay.entities.UserDtlsEntity;
 import com.vijay.helper.EmailUtils;
 import com.vijay.helper.PwdUtils;
@@ -8,8 +7,6 @@ import com.vijay.model.LoginForm;
 import com.vijay.model.ResetPwdForm;
 import com.vijay.model.SignUpForm;
 import com.vijay.model.UnlockForm;
-import com.vijay.repo.ChildUserRepo;
-import com.vijay.repo.StudentEnqRepo;
 import com.vijay.repo.UserDtlsRepo;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.BeanUtils;
@@ -23,8 +20,6 @@ public class UserServiceImpl implements UserService {
     private UserDtlsRepo userDtlsRepo;
     @Autowired
     private EmailUtils emailUtils;
-    @Autowired
-    private ChildUserRepo childUserRepo;
 
     @Autowired
     private HttpSession session;
@@ -33,11 +28,6 @@ public class UserServiceImpl implements UserService {
 
         UserDtlsEntity entity = userDtlsRepo.findByEmailAndPwd(form.getEmail(), form.getPwd());
         if (entity == null) {
-           /* ChildUser childUser= childUserRepo.findByEmailAndPwd(form.getEmail(), form.getPwd());
-            if (childUser != null) {
-                session.setAttribute("userId", childUser.getChildUserId());
-                return "success";
-            }*/
             return "Invalid Credentials";
         }
         if (entity.getAccStatus().equals("LOCKED")) {

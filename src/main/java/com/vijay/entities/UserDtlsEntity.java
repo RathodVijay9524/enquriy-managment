@@ -23,12 +23,11 @@ public class UserDtlsEntity {
     private String name;
     private String email;
 
-    private Integer phoNo;
+    private Long phoNo;
     private String pwd;
     private String accStatus;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<StudentEnqEntity> enquiries;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ChildUser> childUsers;
+
 }
